@@ -102,7 +102,7 @@
                 </div>
             </div>
         </div>     
-        <div class="col-12 col-md-12 col-lg-12 mt-3">
+        <!-- <div class="col-12 col-md-12 col-lg-12 mt-3">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">                               
                     <h6 class="card-title">Precentage by Provider</h6>
@@ -206,7 +206,7 @@
                     </div>
                 </div>
             </div>
-        </div>                 
+        </div>    -->              
     </div>
     <!-- END: Card DATA-->                 
 </div>
