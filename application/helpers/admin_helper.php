@@ -29,7 +29,7 @@ function get_menus(){
         ->from('menus')
         ->where('type in("Single","Main")')
         ->where('status','Active')
-        ->where("JSON_CONTAINS(`privileges`, '[".$CI->session->userdata('role_id')."]')")
+        //->where("JSON_CONTAINS(`privileges`, '[".$CI->session->userdata('role_id')."]')")
         ->order_by('sequence','asc')
         ->get()
         ->result();
@@ -60,7 +60,7 @@ function get_menus(){
                     ->where('type','Sub')
                     ->where('main_id',$menu->id)
                     ->where('status','Active')
-                    ->where("JSON_CONTAINS(`privileges`, '[".$CI->session->userdata('role_id')."]')")
+                    //->where("JSON_CONTAINS(`privileges`, '[".$CI->session->userdata('role_id')."]')")
                     ->order_by('sequence','asc')
                     ->get()->result();
                 
