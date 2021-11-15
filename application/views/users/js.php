@@ -23,7 +23,7 @@ $(document).ready(function() {
         "scrollX": true,
         "order": [], 
         "ajax": {
-            "url": "<?=$base_url.$page?>/data/list",
+            "url": "<?=$base_url.$page?>/data/datalist",
             "data":{"<?=$csrf_token_name?>":"<?=$csrf_hash?>"},
             "type": "POST"
         },

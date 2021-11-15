@@ -22,9 +22,9 @@ class Data extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 		
-        $menu_privilege = $this->db->get_where('menus',"JSON_CONTAINS(`privileges`, '[".$this->session->userdata('role_id')."]') and url like '%".$this->uri->segment(1)."%'")->num_rows();
+        //$menu_privilege = $this->db->get_where('menus',"JSON_CONTAINS(`privileges`, '[".$this->session->userdata('role_id')."]') and url like '%".$this->uri->segment(1)."%'")->num_rows();
 
-        if(!$this->session->userdata('logged_in') == true || $menu_privilege < 1){
+        if(!$this->session->userdata('logged_in') == true){
 			redirect('auth');
 		}
 		$this->title = 'Roles';
@@ -120,7 +120,7 @@ class Data extends CI_Controller {
 		echo json_encode($result);
 	}
 
-	function list()
+	function datalist()
     {
 		$table = 'roles'; //nama tabel dari database
 		$column_order = array(null,'id', 'name','created_at'); //field yang ada di table user
