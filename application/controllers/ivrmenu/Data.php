@@ -53,59 +53,41 @@ class Data extends CI_Controller {
 			'csrf_hash' => $this->security->get_csrf_hash()
 		);
 
-		$phonebooks = dropdown_render($this->db->select('id,name')->get('sms_phonebooks')->result_array(),null);
+		$phonebooks = dropdown_render($this->db->select('id,name')->get('tb_ivrmenu')->result_array(),null);
 
 		$fieldset = array(
 			array(
-				'name'=>'Phone',
+				'name'=>'name',
+				'label'=>'Menu Name (No Space)',
 				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-phone',
 				'custom_attributes'=>array(
-					'data-input_type' => 'numeric',
-					"placeholder"=>"Phone Number"
+					'data-input_type' => 'username'
 				)
 			),
 			array(
-				'name'=>'first_name',
-				'label'=>'Firstname',
-				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
-				'custom_attributes'=>array("placeholder"=>"Fullname")
+				'name'=>'label',
+				'label'=>'Menu Label',
+				'type'=>'text'
 			),
 			array(
-				'name'=>'last_name',
-				'label'=>'Lastname',
-				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
-				'custom_attributes'=>array("placeholder"=>"Lastname")
+				'name'=>'narration',
+				'label'=>'Menu Narration Text',
+				'type'=>'textarea'
 			),
 			array(
-				'name'=>'Email',
-				'type'=>'email',
-				'class'=>'',
-				'icon'=>'fa-envelope',
-				'custom_attributes'=>array("placeholder"=>"address@email.com")
-			),
-			array(
-				'name'=>'Company',
-				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
-				'custom_attributes'=>array("placeholder"=>"Company")
-			),
-			array(
-				'name'=>'phonebook_id',
-				'label'=>'Phone Book',
+				'name'=>'type',
+				'label'=>'Menu Narration Type',
 				'type'=>'select',
-				'class'=>'',
-				'icon'=>'fa-layer-group',
+				'options'=>array('tts'=>'Text To Speech','voice'=>'Recorded Voice'),
+				'default_options'=>'tts'
+			),
+			array(
+				'name'=>'voicepath',
+				'label'=>'Voice File Path',
+				'type'=>'text',
 				'custom_attributes'=>array(
-				),
-				'options'=>$phonebooks,
-				'default_options'=>''
+					'disabled' => true
+				)
 			),
 			array(
 				'name'=>'Action',
@@ -123,79 +105,48 @@ class Data extends CI_Controller {
 	function view($id)
 	{
 
-		$view_data = $this->db->where('id',$id)->get('sms_contacts')->row();
-		$phonebooks = dropdown_render($this->db->select('id,name')->get('sms_phonebooks')->result_array(),null);
+		$view_data = $this->db->where('id',$id)->get('tb_ivrmenu')->row();
+		$phonebooks = dropdown_render($this->db->select('id,name')->get('tb_ivrmenu')->result_array(),null);
 
 		$fieldset = array(
 			array(
-				'name'=>'Phone',
+				'name'=>'name',
+				'label'=>'Menu Name (No Space)',
 				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-phone',
 				'custom_attributes'=>array(
-					'data-input_type' => 'numeric',
-					"placeholder"=>"Phone Number",
-					'value' => $view_data->phone,
-					'disabled' => true,
+					'value' => $view_data->name,
 				)
 			),
 			array(
-				'name'=>'first_name',
-				'label'=>'Firstname',
+				'name'=>'label',
+				'label'=>'Menu Label',
 				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
 				'custom_attributes'=>array(
-					"placeholder"=>"Fullname",
-					'value' => $view_data->first_name,
-					'disabled' => true,
+					'value' => $view_data->label,
 				)
 			),
 			array(
-				'name'=>'last_name',
-				'label'=>'Lastname',
-				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
+				'name'=>'narration',
+				'label'=>'Menu Narration Text',
+				'type'=>'textarea',
 				'custom_attributes'=>array(
-					"placeholder"=>"Lastname",
-					'value' => $view_data->last_name,
-					'disabled' => true,
+					'value' => $view_data->narration,
 				)
 			),
 			array(
-				'name'=>'Email',
-				'type'=>'email',
-				'class'=>'',
-				'icon'=>'fa-envelope',
-				'custom_attributes'=>array(
-					"placeholder"=>"address@email.com",
-					'value' => $view_data->email,
-					'disabled' => true,
-				)
-			),
-			array(
-				'name'=>'Company',
-				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
-				'custom_attributes'=>array(
-					"placeholder"=>"Company",
-					'value' => $view_data->company,
-					'disabled' => true,
-				)
-			),
-			array(
-				'name'=>'phonebook_id',
-				'label'=>'Phone Book',
+				'name'=>'type',
+				'label'=>'Menu Narration Type',
 				'type'=>'select',
-				'class'=>'',
-				'icon'=>'fa-layer-group',
+				'options'=>array('tts'=>'Text To Speech','voice'=>'Recorded Voice'),
+				'default_options'=>$view_data->type
+			),
+			array(
+				'name'=>'voicepath',
+				'label'=>'Voice File Path',
+				'type'=>'text',
 				'custom_attributes'=>array(
-					'disabled' => true,
-				),
-				'options'=>$phonebooks,
-				'default_options'=>$view_data->phonebook_id
+					'value' => $view_data->voicepath,
+				)
 			),
 			array(
 				'name'=>'Action',
@@ -221,73 +172,50 @@ class Data extends CI_Controller {
 	function update($id)
 	{
 
-		$view_data = $this->db->where('id',$id)->get('sms_contacts')->row();
-		$phonebooks = dropdown_render($this->db->select('id,name')->get('sms_phonebooks')->result_array(),null);
+		$view_data = $this->db->where('id',$id)->get('tb_ivrmenu')->row();
+		$phonebooks = dropdown_render($this->db->select('id,name')->get('tb_ivrmenu')->result_array(),null);
 
 		$fieldset = array(
 			array(
-				'name'=>'Phone',
+				'name'=>'name',
+				'label'=>'Menu Name (No Space)',
 				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-phone',
 				'custom_attributes'=>array(
-					'data-input_type' => 'numeric',
-					"placeholder"=>"Phone Number",
-					'value' => $view_data->phone,
+					'value' => $view_data->name,
+					'data-input_type' => 'username'
 				)
 			),
 			array(
-				'name'=>'first_name',
-				'label'=>'Firstname',
+				'name'=>'label',
+				'label'=>'Menu Label',
 				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
 				'custom_attributes'=>array(
-					"placeholder"=>"Fullname",
-					'value' => $view_data->first_name,
+					'value' => $view_data->label,
 				)
 			),
 			array(
-				'name'=>'last_name',
-				'label'=>'Lastname',
-				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
+				'name'=>'narration',
+				'label'=>'Menu Narration Text',
+				'type'=>'textarea',
 				'custom_attributes'=>array(
-					"placeholder"=>"Lastname",
-					'value' => $view_data->last_name,
+					'value' => $view_data->narration,
 				)
 			),
 			array(
-				'name'=>'Email',
-				'type'=>'email',
-				'class'=>'',
-				'icon'=>'fa-envelope',
-				'custom_attributes'=>array(
-					"placeholder"=>"address@email.com",
-					'value' => $view_data->email,
-				)
-			),
-			array(
-				'name'=>'Company',
-				'type'=>'text',
-				'class'=>'',
-				'icon'=>'fa-align-left',
-				'custom_attributes'=>array(
-					"placeholder"=>"Company",
-					'value' => $view_data->company,
-				)
-			),
-			array(
-				'name'=>'phonebook_id',
-				'label'=>'Phone Book',
+				'name'=>'type',
+				'label'=>'Menu Narration Type',
 				'type'=>'select',
-				'class'=>'',
-				'icon'=>'fa-layer-group',
+				'options'=>array('tts'=>'Text To Speech','voice'=>'Recorded Voice'),
+				'default_options'=>$view_data->type
+			),
+			array(
+				'name'=>'voicepath',
+				'label'=>'Voice File Path',
+				'type'=>'text',
 				'custom_attributes'=>array(
-				),
-				'options'=>$phonebooks,
-				'default_options'=>$view_data->phonebook_id
+					'value' => $view_data->voicepath,
+					'disabled'=>true
+				)
 			),
 			array(
 				'name'=>'id',
@@ -319,7 +247,7 @@ class Data extends CI_Controller {
 
 	function form_submit()
 	{
-		$table = "sms_contacts";
+		$table = "tb_ivrmenu";
 		$data = $this->input->post();
 		$data['updated_by'] = $this->session->userdata('user_id');
 		$action = $data['action'];
@@ -333,9 +261,9 @@ class Data extends CI_Controller {
 
 		$this->db->trans_start();
 		if($action == "Update"){
-			$this->db->where('id',$id)->update('sms_contacts',$data);
+			$this->db->where('id',$id)->update('tb_ivrmenu',$data);
 		}else{
-			$this->db->insert('sms_contacts',$data);
+			$this->db->insert('tb_ivrmenu',$data);
 		}
 
 		if($this->db->trans_complete()){
@@ -349,9 +277,9 @@ class Data extends CI_Controller {
 
 	function list()
     {
-		$table = 'sms_contacts'; //nama tabel dari database
-		$column_order = array(null, 'phone','first_name','email','company'); //field yang ada di table user
-		$column_search = array('phone','first_name','email','company'); //field yang diizin untuk pencarian 
+		$table = 'tb_ivrmenu'; //nama tabel dari database
+		$column_order = array(null, 'name','label','type'); //field yang ada di table user
+		$column_search = array('name','label','type'); //field yang diizin untuk pencarian 
 		$order = array('created_at' => 'desc'); // default order 
 		
 		$this->load->model('datatable_model');
@@ -364,15 +292,16 @@ class Data extends CI_Controller {
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $field->phone;
-            $row[] = $field->first_name.' '.$field->last_name;
-            $row[] = $field->email;
-            $row[] = $field->company;
-            $row[] = date_format(date_create($field->created_at),"Y-m-d");
 			$row[] = '
 				<button class="btn-sm delete btn-danger" data-id='.$field->id.' data-toggle="tooltip" data-placement="top" title="Delete this row" style="border-radius: 50%;"><i class="fas fa-trash"></i></button>
 				<button class="btn-sm update btn-primary" data-id='.$field->id.' data-toggle="tooltip" data-placement="top" title="Edit this row" style="border-radius: 50%;"><i class="fas fa-edit"></i></button>
 			';
+            $row[] = $field->name;
+            $row[] = $field->label;
+			$row[] = $field->type;
+            $row[] = $field->voicepath;
+            $row[] = $field->narration;
+            $row[] = date_format(date_create($field->created_at),"Y-m-d");
 			$row[] = $field->id;
  
             $data[] = $row;
@@ -392,7 +321,7 @@ class Data extends CI_Controller {
 		
 		$id = $this->input->post('id');
 
-		if($this->db->where('id',$id)->delete('sms_contacts')){
+		if($this->db->where('id',$id)->delete('tb_ivrmenu')){
 			$result = array("status"=>TRUE,"message"=>"Data has been deleted");
 		}else{
 			$result = array("status"=>FALSE,"message"=>"Data failed to be deleted");

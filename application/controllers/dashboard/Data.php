@@ -39,10 +39,10 @@ class Data extends CI_Controller {
 
 		if($this->role_id=="3"){
 			$limit = $this->db->select('sms_limit')->get_where('users',array('id'=>$this->session->userdata('user_id')))->row()->sms_limit;
-			$total_sms = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("RECEIVED","SENDING","SENT","QUEING") and updated_by = "'.$this->user_id.'"')->row()->total;
-			$sms_otomatis = $this->db->select('count(id) as total')->get_where('sms_transactions','schedule > now() and type = "Schedule"')->row()->total;
+			$total_sms = $this->db->select("count(id) as total")->get_where('tb_keylog','month(created_at) = month(now()) and status in("RECEIVED","SENDING","SENT","QUEING") and updated_by = "'.$this->user_id.'"')->row()->total;
+			$sms_otomatis = $this->db->select('count(id) as total')->get_where('tb_keylog','schedule > now() and type = "Schedule"')->row()->total;
 			$contacts = $this->db->select('count(id) as total')->get('sms_contacts')->row()->total;
-			$sms_all = $this->db->select("count(*) as total")->get_where('v_sms_transactions','year(created_at) = year(now()) and sender = "'.$this->username.'"')->row()->total;
+			$sms_all = $this->db->select("count(*) as total")->get_where('v_tb_keylog','year(created_at) = year(now()) and sender = "'.$this->username.'"')->row()->total;
 
 			if($total_sms>0 && $limit>0){
 				$limit_persent = number_format($total_sms/$limit * 100);
@@ -52,10 +52,10 @@ class Data extends CI_Controller {
 			
 		}else{
 			$limit = $this->db->select('sms_limit')->get_where('users',array('id'=>$this->session->userdata('user_id')))->row()->sms_limit;
-			$total_sms = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("RECEIVED","SENDING","SENT","QUEING") and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-			$sms_otomatis = $this->db->select('count(id) as total')->get_where('sms_transactions','schedule > now() and type = "Schedule" and tenant_id = '.$this->tenant_id)->row()->total;
+			$total_sms = $this->db->select("count(id) as total")->get_where('tb_keylog','month(created_at) = month(now()) and status in("RECEIVED","SENDING","SENT","QUEING") and tenant_id = "'.$this->tenant_id.'"')->row()->total;
+			$sms_otomatis = $this->db->select('count(id) as total')->get_where('tb_keylog','schedule > now() and type = "Schedule" and tenant_id = '.$this->tenant_id)->row()->total;
 			$contacts = $this->db->select('count(id) as total')->get('sms_contacts')->row()->total;
-			$sms_all = $this->db->select("count(*) as total")->get_where('v_sms_transactions','year(created_at) = year(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
+			$sms_all = $this->db->select("count(*) as total")->get_where('v_tb_keylog','year(created_at) = year(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
 		
 			if($total_sms>0 && $limit>0){
 				$limit_persent = number_format($total_sms/$limit * 100);
@@ -197,11 +197,11 @@ class Data extends CI_Controller {
 
 		if($this->role_id=="3"){
 			$data = $this->db->select("count(*) as total")
-			->get_where('v_sms_transactions','sender = "'.$this->username.'" and month(created_at) = "'.$month.'" and provider = "'.$provider.'"')
+			->get_where('v_tb_keylog','sender = "'.$this->username.'" and month(created_at) = "'.$month.'" and provider = "'.$provider.'"')
 			->row()->total;
 		}else{
 			$data = $this->db->select("count(*) as total")
-			->get_where('v_sms_transactions','month(created_at) = "'.$month.'" and provider = "'.$provider.'" and tenant_id = "'.$this->tenant_id.'"')
+			->get_where('v_tb_keylog','month(created_at) = "'.$month.'" and provider = "'.$provider.'" and tenant_id = "'.$this->tenant_id.'"')
 			->row()->total;
 		}
 
@@ -218,13 +218,13 @@ class Data extends CI_Controller {
 
 		if($this->role_id=="3"){
 			$data = $this->db->select("month(created_at) as month, count(1) as total")
-			->from('v_sms_transactions')
+			->from('v_tb_keylog')
 			->where('year(created_at) = year(now()) and sender = "'.$this->username.'" AND '.$where)
 			->group_by('month(created_at)')
 			->get()->result();
 		}else{
 			$data = $this->db->select("month(created_at) as month, count(1) as total")
-			->from('v_sms_transactions')
+			->from('v_tb_keylog')
 			->where('year(created_at) = year(now()) and tenant_id = "'.$this->tenant_id.'" AND '.$where)
 			->group_by('month(created_at)')
 			->get()->result();
@@ -286,14 +286,14 @@ class Data extends CI_Controller {
 
 		if($this->role_id=="3"){
 			$data = $this->db->select("provider, count(1) as total")
-			->from('v_sms_transactions')
+			->from('v_tb_keylog')
 			->where('year(created_at) = year(now()) and sender = "'.$this->username.'"')
 			->group_by('provider')
 			->get()->result();
 			
 		}else{
 			$data = $this->db->select("provider, count(1) as total")
-			->from('v_sms_transactions')
+			->from('v_tb_keylog')
 			->where('year(created_at) = year(now()) and tenant_id = "'.$this->tenant_id.'"')
 			->group_by('provider')
 			->get()->result();
@@ -330,15 +330,15 @@ class Data extends CI_Controller {
 	{
 
 		if($this->role_id=="3"){
-			$total_sms_received = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("RECEIVED") and updated_by = "'.$this->user_id.'"')->row()->total;
-			$total_sms_sent = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("SENT") and updated_by = "'.$this->user_id.'"')->row()->total;
-			$total_sms_sending = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("QUEING","SENDING") and updated_by = "'.$this->user_id.'"')->row()->total;
-			$total_sms_failed = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("FAILED","MSGID_NOT_FOUND","UNSENT") and updated_by = "'.$this->user_id.'"')->row()->total;
+			$total_call = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
+			$total_sms_sent = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
+			$total_sms_sending = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
+			$total_sms_failed = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
 		}else{
-			$total_sms_received = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("RECEIVED") and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-			$total_sms_sent = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("SENT") and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-			$total_sms_sending = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("QUEING","SENDING") and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-			$total_sms_failed = $this->db->select("count(id) as total")->get_where('sms_transactions','month(created_at) = month(now()) and status in("FAILED","MSGID_NOT_FOUND","UNSENT") and tenant_id = "'.$this->tenant_id.'"')->row()->total;
+			$total_sms_received = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
+			$total_sms_sent = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
+			$total_sms_sending = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
+			$total_sms_failed = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
 		}
 
 		$content_data = array(
