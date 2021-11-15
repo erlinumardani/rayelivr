@@ -131,7 +131,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<div class="lock-image col-12 col-sm-5"></div>
 				<div class="login-form col-12 col-sm-7">
 					<div class="form-group mb-3">
-						<img src="{base_url}{logo}" width="100%"><br />
+						<!-- <img src="{base_url}{logo}" width="100%"><br /> -->
 					</div>
 
 					<div class="form-group mb-3">

@@ -108,7 +108,7 @@
                   <svg height="20pt" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512" width="20pt" xmlns="http://www.w3.org/2000/svg">
                   <g transform="matrix(.1 0 0 -.1 0 512)" fill="#1e3d73">
                   </g>
-                  </svg> <span class="h4 font-weight-bold align-self-center mb-0 ml-auto"><img src="{base_url}{logo}" height="100%"></span>              
+                  <!-- </svg> <span class="h4 font-weight-bold align-self-center mb-0 ml-auto"><img src="{base_url}{logo}" height="100%"></span>      -->         
               </a>                   
           </div>
           <div class="navbar-header h4 mb-0 text-center h-100 collapse-menu-bar">
