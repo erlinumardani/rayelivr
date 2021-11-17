@@ -63,11 +63,10 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(data)
         {
-            $('#total_sms_received').text(data.total_sms_received);
-            $('#total_sms_sent').text(data.total_sms_sent);
-            $('#total_sms_sending').text(data.total_sms_sending);
-            $('#total_sms_failed').text(data.total_sms_failed);
-            $('#total_sms').text(number_format(parseInt(data.total_sms_received.replace(/,/g, "")) + parseInt(data.total_sms_sent.replace(/,/g, "")) + parseInt(data.total_sms_sending.replace(/,/g, ""))));
+            $('#all').text(data.all);
+            $('#conventional').text(data.conventional);
+            $('#digital').text(data.digital);
+            $('#cust_repeatcall').text(data.cust_repeatcall);
             $('#summary').unblock();
         }
     });
@@ -94,13 +93,10 @@ $(document).ready(function() {
             $('#y_three').text(data.y_three);
             $('#y_other').text(data.y_other); */
 
-            gm_telkomsel = data.gm_telkomsel;
-            gm_indosat = data.gm_indosat; 
-            gm_xl = data.gm_xl;
-            gm_axis = data.gm_axis; 
-            gm_smartfren = data.gm_smartfren;
-            gm_three = data.gm_three;
-            gm_other = data.gm_other;
+            kodepos = data.kodepos;
+            kec_kel = data.kec_kel; 
+            notelp = data.notelp;
+            nama_alamat = data.nama_alamat; 
 
             ////////// Apex Analytic Chart //////////////
             var theme = 'light';
@@ -139,35 +135,26 @@ $(document).ready(function() {
                         width: 2,
                         colors: ['transparent']
                     },
-                    colors: ['#1ee0ac', '#7782bd', '#753c94', '#f64e60', '#eb6431', '#ffd04c', '#aaaaaa'],
+                    colors: ['#1ee0ac', '#7782bd', '#753c94', '#f64e60', '#eb6431'],
                     series: [{
-                            name: 'XL',
-                            data: gm_xl
+                            name: 'Pencarian Kode Pos',
+                            data: kodepos
                         }, {
-                            name: 'Three',
-                            data: gm_three
+                            name: 'Pencarian Kecamatan Keluarahan',
+                            data: kec_kel
                         }, {
-                            name: 'Axis',
-                            data: gm_axis
+                            name: 'Pencarian No Telp',
+                            data: notelp
                         }, {
-                            name: 'Telkomsel',
-                            data: gm_telkomsel
-                        }, {
-                            name: 'Smartfren',
-                            data: gm_smartfren
-                        }, {
-                            name: 'Indosat',
-                            data: gm_indosat
-                        }, {
-                            name: 'Other',
-                            data: gm_other
+                            name: 'Pencarian Nama / Alamat',
+                            data: nama_alamat
                         }],
                     xaxis: {
                         categories: ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Des'],
                     },
                     yaxis: {
                         title: {
-                            text: '(sms)'
+                            text: '(call)'
                         }
                     },
                     fill: {
@@ -177,7 +164,7 @@ $(document).ready(function() {
                     tooltip: {
                         y: {
                             formatter: function (val) {
-                                return val + " sms"
+                                return val + " call"
                             }
                         }
                     }

@@ -151,27 +151,19 @@ class Data extends CI_Controller {
 		return $data;
 	}
 
-	function getdata_provider($provider){
+	function getdata_grafik_monthly($filter){
 
-		if($provider == null){
-			$where = 'provider is null';
+		if($filter == null){
+			$where = 'node is null';
 		}else{
-			$where = 'provider = "'.$provider.'"';
+			$where = 'node = "'.$filter.'"';
 		}
 
-		if($this->role_id=="3"){
-			$data = $this->db->select("month(created_at) as month, count(1) as total")
-			->from('v_tb_keylog')
-			->where('year(created_at) = year(now()) and sender = "'.$this->username.'" AND '.$where)
-			->group_by('month(created_at)')
+		$data = $this->db->select("month(row_date) as month, count(1) as total")
+			->from('tb_keylog')
+			->where('year(row_date) = year(now()) and '.$where)
+			->group_by('month(row_date)')
 			->get()->result();
-		}else{
-			$data = $this->db->select("month(created_at) as month, count(1) as total")
-			->from('v_tb_keylog')
-			->where('year(created_at) = year(now()) and tenant_id = "'.$this->tenant_id.'" AND '.$where)
-			->group_by('month(created_at)')
-			->get()->result();
-		}
 
 		$result = array(0,0,0,0,0,0,0,0,0,0,0,0);
 
@@ -248,22 +240,16 @@ class Data extends CI_Controller {
 	function getdata_grafik()
 	{
 
-		$gm_telkomsel = $this->getdata_provider('Telkomsel');
-		$gm_indosat = $this->getdata_provider('Indosat');
-		$gm_xl = $this->getdata_provider('XL');
-		$gm_axis = $this->getdata_provider('AXIS');
-		$gm_smartfren = $this->getdata_provider('Smartfren');
-		$gm_three = $this->getdata_provider('Three');
-		$gm_other = $this->getdata_provider(null);
+		$kodepos = $this->getdata_grafik_monthly('MenuCariKodePos');
+		$kec_kel = $this->getdata_grafik_monthly('MenuKodePosBasedOnKota');
+		$notelp = $this->getdata_grafik_monthly('MenuNoTelp');
+		$nama_alamat = $this->getdata_grafik_monthly('MenuQuestionNamaAlamat');
 
 		$content_data = array(
-			'gm_telkomsel' => $gm_telkomsel,
-			'gm_indosat' => $gm_indosat,
-			'gm_xl' => $gm_xl,
-			'gm_axis' => $gm_axis,
-			'gm_smartfren' => $gm_smartfren,
-			'gm_three' => $gm_three,
-			'gm_other' => $gm_other,
+			'kodepos' => $kodepos,
+			'kec_kel' => $kec_kel,
+			'notelp' => $notelp,
+			'nama_alamat' => $nama_alamat,
 		);
 		
 		echo json_encode($content_data);
@@ -272,23 +258,16 @@ class Data extends CI_Controller {
 	function getdata_summary()
 	{
 
-		if($this->role_id=="3"){
-			$total_call = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
-			$total_sms_sent = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
-			$total_sms_sending = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
-			$total_sms_failed = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and updated_by = "'.$this->user_id.'"')->row()->total;
-		}else{
-			$total_sms_received = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-			$total_sms_sent = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-			$total_sms_sending = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-			$total_sms_failed = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog','month(created_at) = month(now()) and tenant_id = "'.$this->tenant_id.'"')->row()->total;
-		}
+		$all = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog')->row()->total;
+		$conventional = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog',array('node'=>'MainMenu','keypress'=>'1'))->row()->total;
+		$digital = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog',array('node'=>'MainMenu','keypress'=>'2'))->row()->total;
+		$cust_repeatcall = $this->db->select("count(uniqueid) as total")->group_by('uniqueid')->get_where('tb_keylog')->row()->total;
 
 		$content_data = array(
-			'total_sms_received' => number_format($total_sms_received),
-			'total_sms_sent' => number_format($total_sms_sent),
-			'total_sms_sending' => number_format($total_sms_sending),
-			'total_sms_failed' => number_format($total_sms_failed),
+			'all' => number_format($all),
+			'conventional' => number_format($conventional),
+			'digital' => number_format($digital),
+			'cust_repeatcall' => number_format($cust_repeatcall),
 		);
 		
 		echo json_encode($content_data);
