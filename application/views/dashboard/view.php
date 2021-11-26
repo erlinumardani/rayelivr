@@ -6,7 +6,7 @@
     <div id="summary" class="row">
         <div class="col-12 col-sm-6 col-xl-3 mt-3">
             <div class="card">
-                <div class="card-body text-success border-bottom border-success border-w-5">
+                <div class="card-body text-primary border-bottom border-primary border-w-5">
                     <h2 id="all" class="text-center"></h2>
                     <h6 class="text-center">108 All Traffic</h6>       
                 </div>
@@ -30,7 +30,7 @@
         </div>
         <div class="col-12 col-sm-6 col-xl-3 mt-3">
             <div class="card">
-                <div class="card-body text-danger border-bottom border-danger border-w-5">
+                <div class="card-body text-default border-bottom border-default border-w-5">
                     <h2 class="text-center" id ="cust_repeatcall"></h2>
                     <h6 class="text-center">Customer Repeat Call</h6>       
                 </div>
@@ -119,7 +119,7 @@
                                                 <span class="tip-arrow"></span>
                                             </span>
                                         </div>
-                                        <span class="fill" data-percentage="<?=$y_xl?>"></span>
+                                        <span class="fill" data-percentage="<?=round($MenuKodePosBasedOnKode_s/$MenuKodePosBasedOnKode*100)?>"></span>Pencarian Kode Pos: <?=$MenuKodePosBasedOnKode_s.'/'.$MenuKodePosBasedOnKode?>
                                     </div>                                 
                                 </div> 
                             </li>
@@ -132,7 +132,7 @@
                                                 <span class="tip-arrow"></span>
                                             </span>
                                         </div>
-                                        <span class="fill" data-percentage="<?=$y_three?>"></span>
+                                        <span class="fill" data-percentage="<?=round($MenuKodePosBasedOnKota_s/$MenuKodePosBasedOnKota*100)?>"></span>Pencarian Kecamatan Kelurahan: <?=$MenuKodePosBasedOnKota_s.'/'.$MenuKodePosBasedOnKota?>
                                     </div>                                 
                                 </div> 
                             </li>
@@ -145,7 +145,7 @@
                                                 <span class="tip-arrow"></span>
                                             </span>
                                         </div>
-                                        <span class="fill" data-percentage="<?=$y_axis?>"></span>
+                                        <span class="fill" data-percentage="<?=round($MenuNoTelp_s/$MenuNoTelp*100)?>"></span>Pencarian No Telp: <?=$MenuNoTelp_s.'/'.$MenuNoTelp?>
                                     </div>                                 
                                 </div> 
                             </li>
@@ -158,7 +158,7 @@
                                                 <span class="tip-arrow"></span>
                                             </span>
                                         </div>
-                                        <span class="fill" data-percentage="<?=$y_telkomsel?>"></span>
+                                        <span class="fill" data-percentage="<?=round($MenuNoTelponBasedOnAlamat_s/$MenuNoTelponBasedOnAlamat*100)?>"></span>Pencarian Nama / Alamat: <?=$MenuNoTelponBasedOnAlamat_s.'/'.$MenuNoTelponBasedOnAlamat?> 
                                     </div>                                 
                                 </div> 
                             </li>

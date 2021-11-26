@@ -104,6 +104,16 @@ class Data extends CI_Controller {
 
 		} */
 
+		$MenuKodePosBasedOnKode = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog',array('node'=>'MenuKodePosBasedOnKode'))->row()->total;
+		$MenuKodePosBasedOnKota = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog',array('node'=>'MenuKodePosBasedOnKota'))->row()->total;
+		$MenuNoTelp = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog',array('node'=>'MenuNoTelponBasedOnTelp'))->row()->total;
+		$MenuNoTelponBasedOnAlamat = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog',array('node'=>'MenuNoTelponBasedOnAlamat'))->row()->total;
+		$MenuKodePosBasedOnKode_s = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog',array('node'=>'InputKodePosSuccess'))->row()->total;
+		$MenuKodePosBasedOnKota_s = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog',array('node'=>'InputKodePosKotaSuccess'))->row()->total;
+		$MenuNoTelp_s = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog','uniqueid in (select uniqueid from tb_keylog where node = "MenuNoTelponBasedOnTelp") and node = "ResultQuestion"')->row()->total;
+		$MenuNoTelponBasedOnAlamat_s =$this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog','uniqueid in (select uniqueid from tb_keylog where node = "MenuNoTelponBasedOnAlamat") and node = "ResultQuestion"')->row()->total;
+		
+
 		$content_data = array(
 			'base_url' => base_url(),
 			'page' => $this->uri->segment(1),
@@ -118,7 +128,15 @@ class Data extends CI_Controller {
 			'y_axis' => 0,
 			'y_smartfren' => 0,
 			'y_three' => 0,
-			'y_other' => 0
+			'y_other' => 0,
+			'MenuKodePosBasedOnKode' => $MenuKodePosBasedOnKode,
+			'MenuKodePosBasedOnKota' => $MenuKodePosBasedOnKota,
+			'MenuNoTelp' => $MenuNoTelp,
+			'MenuNoTelponBasedOnAlamat' => $MenuNoTelponBasedOnAlamat,
+			'MenuKodePosBasedOnKode_s' => $MenuKodePosBasedOnKode_s,
+			'MenuKodePosBasedOnKota_s' => $MenuKodePosBasedOnKota_s,
+			'MenuNoTelp_s' => $MenuNoTelp_s,
+			'MenuNoTelponBasedOnAlamat_s' => $MenuNoTelponBasedOnAlamat_s,
 		);
 		
 		page_view($this->title, 'view', $content_data);
@@ -159,7 +177,7 @@ class Data extends CI_Controller {
 			$where = 'node = "'.$filter.'"';
 		}
 
-		$data = $this->db->select("month(row_date) as month, count(1) as total")
+		$data = $this->db->select("month(row_date) as month, count(distinct uniqueid) as total")
 			->from('tb_keylog')
 			->where('year(row_date) = year(now()) and '.$where)
 			->group_by('month(row_date)')
@@ -240,10 +258,10 @@ class Data extends CI_Controller {
 	function getdata_grafik()
 	{
 
-		$kodepos = $this->getdata_grafik_monthly('MenuCariKodePos');
+		$kodepos = $this->getdata_grafik_monthly('MenuKodePosBasedOnKode');
 		$kec_kel = $this->getdata_grafik_monthly('MenuKodePosBasedOnKota');
-		$notelp = $this->getdata_grafik_monthly('MenuNoTelp');
-		$nama_alamat = $this->getdata_grafik_monthly('MenuQuestionNamaAlamat');
+		$notelp = $this->getdata_grafik_monthly('MenuNoTelponBasedOnTelp');
+		$nama_alamat = $this->getdata_grafik_monthly('MenuNoTelponBasedOnAlamat');
 
 		$content_data = array(
 			'kodepos' => $kodepos,
@@ -258,13 +276,27 @@ class Data extends CI_Controller {
 	function getdata_summary()
 	{
 
-		$all = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog')->row()->total;
-		$conventional = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog',array('node'=>'MainMenu','keypress'=>'1'))->row()->total;
-		$digital = $this->db->select("count(uniqueid) as total")->get_where('tb_keylog',array('node'=>'MainMenu','keypress'=>'2'))->row()->total;
-		$cust_repeatcall = $this->db->select("count(uniqueid) as total")->group_by('uniqueid')->get_where('tb_keylog')->row()->total;
+		//$all = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog')->row()->total;
+		$conventional = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog','(node = "MainMenu" and keypress = 2) or (node = "Main108" and keypress = 2)')->row()->total;
+		$digital = $this->db->select("count(distinct uniqueid) as total")->get_where('tb_keylog','(node = "MainMenu" and keypress = 1) or (node = "Main108" and keypress = 1)')->row()->total;
+		$cust_repeatcall = 
+		$this->db->query("SELECT sum( total ) as total
+			FROM
+				(
+				SELECT
+					DATE_FORMAT( row_date, '%Y-%m-%d' ) AS date,
+					count( DISTINCT src ) AS total 
+				FROM
+					tb_keylog 
+				GROUP BY
+					DATE_FORMAT( row_date, '%Y-%m-%d' ) 
+				HAVING
+				COUNT( src ) > 3 
+				) AS items
+		")->row()->total;
 
 		$content_data = array(
-			'all' => number_format($all),
+			'all' => number_format($conventional + $digital),
 			'conventional' => number_format($conventional),
 			'digital' => number_format($digital),
 			'cust_repeatcall' => number_format($cust_repeatcall),

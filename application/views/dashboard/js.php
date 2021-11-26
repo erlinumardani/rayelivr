@@ -103,6 +103,15 @@ $(document).ready(function() {
             if ($("#apex_analytic_chart").length > 0)
             {
                 options = {
+                    legend: {
+                        show: true,
+                        offsetX: 0,
+                        offsetY: 0,
+                        fontSize: '10px',
+                        markers: {
+                            radius: 12,
+                        },
+                    },
                     theme: {
                         mode: theme
                     },
@@ -128,7 +137,11 @@ $(document).ready(function() {
                         },
                     },
                     dataLabels: {
-                        enabled: false
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            colors: ['black']
+                        },
                     },
                     stroke: {
                         show: true,
@@ -140,7 +153,7 @@ $(document).ready(function() {
                             name: 'Pencarian Kode Pos',
                             data: kodepos
                         }, {
-                            name: 'Pencarian Kecamatan Keluarahan',
+                            name: 'Pencarian Kecamatan Kelurahan',
                             data: kec_kel
                         }, {
                             name: 'Pencarian No Telp',
@@ -154,7 +167,7 @@ $(document).ready(function() {
                     },
                     yaxis: {
                         title: {
-                            text: '(call)'
+                            text: '(Call IVR 108 Mothly)'
                         }
                     },
                     fill: {

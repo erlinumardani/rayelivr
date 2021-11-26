@@ -37,6 +37,9 @@
     .compact-menu:not(.horizontal-menu) #header-fix .logo-bar {
       width: 250px;
    }
+   #my{
+        zoom: 100%;
+    }
   </style>
 
     
