@@ -176,7 +176,7 @@
 <!-- END: Content-->
 <!-- START: Footer-->
 <footer class="site-footer">
-  2020 &copy;
+  108 Digital 2021 &copy;
 </footer>
 <!-- END: Footer-->
 
