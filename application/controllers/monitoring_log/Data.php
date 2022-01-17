@@ -47,7 +47,8 @@ class Data extends CI_Controller {
 		$table = 'v_keylog'; //nama tabel dari database
 		$column_order = array(null, 'uniqueid','src','created_at','node','keypress','descriptions'); //field yang ada di table user
 		$column_search = array('uniqueid','src','created_at','node','keypress','descriptions'); //field yang diizin untuk pencarian 
-		$order = array('created_at' => 'desc'); // default order 
+		$order = array('created_at' => 'asc'); // default order 
+		unset($_POST['order']);
 		
 		$this->load->model('datatable_model');
 
